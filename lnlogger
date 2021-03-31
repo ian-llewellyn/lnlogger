@@ -1,0 +1,20 @@
+#!/bin/bash
+
+input=/dev/stdin
+
+log_time() {
+  echo -n "[$(date +"%d/%m/%Y %H:%M:%S")]"
+}
+
+skipped="false"
+while read -t 1 line || true; do
+  if [[ -z "$line" && $skipped == "true" ]]; then
+    continue
+  elif [[ -z "$line" && $skipped == "false" ]]; then
+    skipped="true"
+  elif [[ $skipped == "true" ]]; then
+    # Line is not empty - reset skipped
+    skipped="false"
+  fi
+  echo $(log_time) "$line"
+done
